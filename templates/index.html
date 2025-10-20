@@ -1,11 +1,50 @@
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title> lojinha </title>
-</head>
+{% extends 'base.html' %}
 
-<body>
-    <h1> SA para o senai!!!!!!!!!!!!!!!!!!!</h1>
-    <img src="/SA_SENAI2025/static/messi_oldmoney.jpg" alt="messi old money" width="600px" height="500px"
-</body>
-</html>
+{% block title %}Produtos - SA Desapego{% endblock %}
+
+{% block content %}
+<div class="container">
+    <header class="page-header">
+        <h1>Produtos Disponíveis</h1>
+        <p class="subtitle">Encontre ótimas oportunidades</p>
+    </header>
+
+    <div class="products-grid">
+        <!-- Produto exemplo 1 -->
+        <div class="product-card">
+            <div class="product-image">
+                <div class="placeholder-image">📦</div>
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">Nome do Produto</h3>
+                <p class="product-price">R$ 150,00</p>
+                <button class="btn-primary">Ver detalhes</button>
+            </div>
+        </div>
+
+        <!-- Produto exemplo 2 -->
+        <div class="product-card">
+            <div class="product-image">
+                <div class="placeholder-image">📦</div>
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">Outro Produto</h3>
+                <p class="product-price">R$ 89,90</p>
+                <button class="btn-primary">Ver detalhes</button>
+            </div>
+        </div>
+
+        <!-- Produto exemplo 3 -->
+        <div class="product-card">
+            <div class="product-image">
+                <div class="placeholder-image">📦</div>
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">Mais um Produto</h3>
+                <p class="product-price">R$ 320,00</p>
+                <button class="btn-primary">Ver detalhes</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
