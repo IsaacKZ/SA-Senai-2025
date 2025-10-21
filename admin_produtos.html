@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+
+{% block title %}Gerenciar Produtos - Admin{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="admin-produtos-wrapper">
+        
+        <!-- Header -->
+        <div class="admin-produtos-header">
+            <div>
+                <h1>Gerenciar Produtos</h1>
+                <p class="subtitle">Gerencie todos os seus produtos publicados</p>
+            </div>
+            <a href="/admin" class="btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Novo Produto
+            </a>
+        </div>
+
+        <!-- Filtros -->
+        <div class="produtos-filters">
+            <button class="filter-btn active" data-filter="todos">
+                Todos ({{ produtos|length }})
+            </button>
+            <button class="filter-btn" data-filter="disponivel">
+                Disponíveis ({{ produtos|selectattr('status', 'equalto', 'disponivel')|list|length }})
+            </button>
+            <button class="filter-btn" data-filter="vendido">
+                Vendidos ({{ produtos|selectattr('status', 'equalto', 'vendido')|list|length }})
+            </button>
+        </div>
+
+        <!-- Lista de Produtos -->
+        <div class="produtos-lista">
+            {% if produtos %}
+                {% for produto in produtos %}
+                <div class="produto-item" data-status="{{ produto.status }}">
+                    <div class="produto-item-info">
+                        <div class="produto-item-icon">
+                            📦
+                        </div>
+                        <div class="produto-item-detalhes">
+                            <h3 class="produto-item-nome">{{ produto.nome }}</h3>
+                            <div class="produto-item-meta">
+                                <span class="meta-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                                    </svg>
+                                    {{ produto.categoria }}
+                                </span>
+                                <span class="meta-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                    {{ produto.data }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="produto-item-preco">
+                        <span class="preco-valor">R$ {{ "%.2f"|format(produto.preco)|replace(".", ",") }}</span>
+                        <span class="status-badge status-{{ produto.status }}">
+                            {% if produto.status == 'disponivel' %}
+                                ✓ Disponível
+                            {% else %}
+                                ✕ Vendido
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <div class="produto-item-acoes">
+                        {% if produto.status == 'disponivel' %}
+                            <button class="btn-action btn-edit" onclick="editarProduto({{ produto.id }})" title="Editar">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                            </button>
+                            <button class="btn-action btn-sold" onclick="marcarVendido({{ produto.id }}, '{{ produto.nome|replace("'", "\\'") }}')" title="Marcar como vendido">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </button>
+                        {% endif %}
+                        <button class="btn-action btn-delete" onclick="excluirProduto({{ produto.id }}, '{{ produto.nome|replace("'", "\\'") }}')" title="Excluir">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">📦</div>
+                    <h3>Nenhum produto cadastrado</h3>
+                    <p>Comece adicionando seu primeiro produto</p>
+                    <a href="/admin" class="btn-primary">Adicionar Produto</a>
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal de Confirmação para Vendido -->
+<div class="modal-overlay" id="soldModal">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2>Marcar como Vendido</h2>
+            <button class="modal-close" onclick="closeSoldModal()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-icon modal-icon-success">✓</div>
+            <p class="modal-message">Confirma que o produto <strong id="soldProductName"></strong> foi vendido?</p>
+            <p class="modal-submessage">Ele ainda ficará visível na lista mas marcado como vendido.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal-cancel" onclick="closeSoldModal()">Cancelar</button>
+            <button class="btn-modal-confirm" id="confirmSoldBtn">Sim, foi vendido</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Confirmação para Excluir -->
+<div class="modal-overlay" id="deleteModal">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2>Excluir Produto</h2>
+            <button class="modal-close" onclick="closeDeleteModal()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-icon modal-icon-danger">⚠</div>
+            <p class="modal-message">Tem certeza que deseja excluir <strong id="deleteProductName"></strong>?</p>
+            <p class="modal-submessage">Esta ação não pode ser desfeita!</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal-cancel" onclick="closeDeleteModal()">Cancelar</button>
+            <button class="btn-modal-confirm btn-modal-danger" id="confirmDeleteBtn">Sim, excluir</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

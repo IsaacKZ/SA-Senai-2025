@@ -36,5 +36,39 @@ def produto_detalhes(id):
 def admin():
     return render_template("admin.html")
 
+@app.route('/admin/produtos')
+def admin_produtos():
+    # Por enquanto, produtos fake (depois vem do banco)
+    produtos_exemplo = [
+        {
+            'id': 1,
+            'nome': 'iPhone 13 Pro Max',
+            'preco': 3500.00,
+            'categoria': 'Eletrônicos',
+            'estado': 'Seminovo',
+            'status': 'disponivel',  # disponivel ou vendido
+            'data': '20/10/2025'
+        },
+        {
+            'id': 2,
+            'nome': 'Notebook Dell',
+            'preco': 2200.00,
+            'categoria': 'Eletrônicos',
+            'estado': 'Usado',
+            'status': 'disponivel',
+            'data': '19/10/2025'
+        },
+        {
+            'id': 3,
+            'nome': 'Camiseta Nike',
+            'preco': 80.00,
+            'categoria': 'Roupas',
+            'estado': 'Novo',
+            'status': 'vendido',
+            'data': '18/10/2025'
+        }
+    ]
+    return render_template('admin_produtos.html', produtos=produtos_exemplo)
+
 if __name__ == '__main__':
     app.run(debug=True)
