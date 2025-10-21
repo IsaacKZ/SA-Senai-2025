@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ produto.nome }} - SA Desapego{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="produto-detalhes-wrapper">
+        
+        <!-- Botão Voltar -->
+        <a href="/" class="btn-back">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Voltar
+        </a>
+
+        <div class="produto-detalhes-content">
+            
+            <!-- Imagem -->
+            <div class="produto-detalhes-imagem">
+                <div class="imagem-principal">
+                    <div class="placeholder-image-large">📦</div>
+                </div>
+            </div>
+
+            <!-- Informações -->
+            <div class="produto-detalhes-info">
+                <div class="produto-badges">
+                    <span class="badge badge-categoria">{{ produto.categoria }}</span>
+                    <span class="badge badge-estado badge-estado-{{ produto.estado.lower() }}">
+                        {{ produto.estado }}
+                    </span>
+                </div>
+
+                <h1 class="produto-titulo">{{ produto.nome }}</h1>
+                
+                <div class="produto-preco-destaque">
+                    <span class="preco-valor">R$ {{ "%.2f"|format(produto.preco)|replace(".", ",") }}</span>
+                </div>
+
+                <div class="produto-descricao-section">
+                    <h3>Descrição</h3>
+                    <p class="produto-descricao-texto">{{ produto.descricao }}</p>
+                </div>
+
+                <div class="produto-acoes">
+                    <button class="btn-primary btn-full btn-interesse">
+                        Tenho Interesse
+                    </button>
+                    <button class="btn-secondary btn-full">
+                        Compartilhar
+                    </button>
+                </div>
+
+                <div class="produto-info-extra">
+                    <div class="info-item">
+                        <span class="info-label">ID do produto:</span>
+                        <span class="info-value">#{{ produto.id }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Publicado em:</span>
+                        <span class="info-value">Hoje</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
