@@ -4,6 +4,49 @@
 
 {% block content %}
 <div class="container">
+    <div class="container">
+    
+        <!-- Barra de Busca e Filtros -->
+        <div class="search-filter-section">
+            
+            <!-- Busca -->
+            <div class="search-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input type="text" id="searchInput" placeholder="Buscar produtos..." class="search-input">
+            </div>
+    
+            <!-- Filtros -->
+            <div class="filters-container">
+                <select id="filterCategoria" class="filter-select">
+                    <option value="">Todas categorias</option>
+                    <option value="eletronicos">Eletrônicos</option>
+                    <option value="roupas">Roupas</option>
+                    <option value="moveis">Móveis</option>
+                    <option value="livros">Livros</option>
+                    <option value="esportes">Esportes</option>
+                    <option value="outros">Outros</option>
+                </select>
+    
+                <select id="filterEstado" class="filter-select">
+                    <option value="">Todos estados</option>
+                    <option value="novo">Novo</option>
+                    <option value="seminovo">Seminovo</option>
+                    <option value="usado">Usado</option>
+                </select>
+    
+                <button id="clearFilters" class="btn-clear-filters">
+                    Limpar filtros
+                </button>
+            </div>
+        </div>
+    
+        <header class="page-header">
+            <h1>Produtos Disponíveis</h1>
+            <p class="subtitle">Encontre ótimas oportunidades</p>
+        </header>
     <header class="page-header">
         <h1>Produtos Disponíveis</h1>
         <p class="subtitle">Encontre ótimas oportunidades</p>
@@ -12,6 +55,7 @@
     <div class="products-grid">
         <!-- Produto exemplo 1 -->
         <div class="product-card">
+            <span class="badge-novo">🆕 Novo</span>
             <div class="product-image">
                 <div class="placeholder-image">📦</div>
             </div>

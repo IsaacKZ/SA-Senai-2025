@@ -401,3 +401,77 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// ============================================
+// BUSCA E FILTROS DE PRODUTOS
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const filterCategoria = document.getElementById('filterCategoria');
+    const filterEstado = document.getElementById('filterEstado');
+    const clearFiltersBtn = document.getElementById('clearFilters');
+    const productsGrid = document.querySelector('.products-grid');
+    
+    if (searchInput && productsGrid) {
+        
+        // Função de filtrar produtos
+        function filterProducts() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const categoriaValue = filterCategoria.value.toLowerCase();
+            const estadoValue = filterEstado.value.toLowerCase();
+            
+            const productCards = productsGrid.querySelectorAll('.product-card');
+            let visibleCount = 0;
+            
+            productCards.forEach(card => {
+                const productName = card.querySelector('.product-name').textContent.toLowerCase();
+                
+                // Por enquanto, dados fake - depois vem do backend
+                // Simula categoria e estado nos cards (você pode adicionar data-attributes depois)
+                const matchSearch = productName.includes(searchTerm);
+                const matchCategoria = categoriaValue === '' || true; // Sempre true por enquanto (fake data)
+                const matchEstado = estadoValue === '' || true; // Sempre true por enquanto (fake data)
+                
+                if (matchSearch && matchCategoria && matchEstado) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Mostrar mensagem se não houver resultados
+            let noResults = document.querySelector('.no-results');
+            if (visibleCount === 0) {
+                if (!noResults) {
+                    noResults = document.createElement('div');
+                    noResults.className = 'no-results';
+                    noResults.innerHTML = `
+                        <div class="no-results-icon">🔍</div>
+                        <h3>Nenhum produto encontrado</h3>
+                        <p>Tente ajustar os filtros ou buscar por outro termo</p>
+                    `;
+                    productsGrid.parentElement.appendChild(noResults);
+                }
+            } else {
+                if (noResults) {
+                    noResults.remove();
+                }
+            }
+        }
+        
+        // Event listeners
+        searchInput.addEventListener('input', filterProducts);
+        filterCategoria.addEventListener('change', filterProducts);
+        filterEstado.addEventListener('change', filterProducts);
+        
+        // Limpar filtros
+        clearFiltersBtn.addEventListener('click', function() {
+            searchInput.value = '';
+            filterCategoria.value = '';
+            filterEstado.value = '';
+            filterProducts();
+            showToast('Filtros limpos!', 'info', 'Resetado');
+        });
+    }
+});
