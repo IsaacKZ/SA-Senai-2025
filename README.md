@@ -24,12 +24,12 @@ Desenvolvido como parte do projeto **SA SENAI 2025**, o sistema oferece uma **in
 - Toggle para visualizar/ocultar senhas
 - Design responsivo (mobile-first)
 - Tema escuro completo
+- Área administrativa para gerenciar produtos  
+- Upload de imagens de produtos 
 
 ### 🚧Em Desenvolvimento
 - Integração com banco de dados  
-- Sistema de autenticação funcional (backend)  
-- Área administrativa para gerenciar produtos  
-- Upload de imagens de produtos  
+- Sistema de autenticação funcional (backend)   
 - Página de detalhes do produto  
 - Sistema de busca e filtros  
 
