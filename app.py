@@ -70,5 +70,15 @@ def admin_produtos():
     ]
     return render_template('admin_produtos.html', produtos=produtos_exemplo)
 
+@app.route('/perfil')
+def perfil():
+    # Por enquanto, usuário fake (depois vem da sessão/banco)
+    usuario_exemplo = {
+        'nome': 'João Silva',
+        'email': 'joao@email.com',
+        'data_cadastro': '15/10/2025'
+    }
+    return render_template('perfil.html', usuario=usuario_exemplo)
+
 if __name__ == '__main__':
     app.run(debug=True)

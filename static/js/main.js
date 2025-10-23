@@ -595,6 +595,34 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+    
+    // Event listeners para os botões de ação
+    const btnEdits = document.querySelectorAll('.btn-edit');
+    const btnSolds = document.querySelectorAll('.btn-sold');
+    const btnDeletes = document.querySelectorAll('.btn-delete');
+    
+    btnEdits.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            editarProduto(id);
+        });
+    });
+    
+    btnSolds.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            const nome = this.getAttribute('data-nome');
+            marcarVendido(id, nome);
+        });
+    });
+    
+    btnDeletes.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            const nome = this.getAttribute('data-nome');
+            excluirProduto(id, nome);
+        });
+    });
 });
 
 // Editar Produto
@@ -632,7 +660,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Simula atualização visual
             setTimeout(() => {
-                const item = document.querySelector(`.produto-item[data-status="disponivel"]`);
+                const item = document.querySelector(`.produto-item[data-id="${currentSoldId}"]`);
                 if (item) {
                     item.setAttribute('data-status', 'vendido');
                     const badge = item.querySelector('.status-badge');
@@ -678,12 +706,12 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Simula remoção visual
             setTimeout(() => {
-                const items = document.querySelectorAll('.produto-item');
-                if (items.length > 0) {
-                    items[0].style.opacity = '0';
-                    items[0].style.transform = 'translateX(-50px)';
+                const item = document.querySelector(`.produto-item[data-id="${currentDeleteId}"]`);
+                if (item) {
+                    item.style.opacity = '0';
+                    item.style.transform = 'translateX(-50px)';
                     setTimeout(() => {
-                        items[0].remove();
+                        item.remove();
                         
                         // Verifica se ainda tem produtos
                         const remaining = document.querySelectorAll('.produto-item');
@@ -703,3 +731,113 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// ============================================
+// PÁGINA DE PERFIL
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    const editToggle = document.getElementById('editToggle');
+    const perfilForm = document.getElementById('perfilForm');
+    const nomeInput = document.getElementById('nome');
+    const formActions = document.getElementById('formActions');
+    const cancelEdit = document.getElementById('cancelEdit');
+    
+    let nomeOriginal = '';
+    
+    // Toggle modo de edição
+    if (editToggle) {
+        editToggle.addEventListener('click', function() {
+            nomeOriginal = nomeInput.value;
+            nomeInput.disabled = false;
+            nomeInput.focus();
+            formActions.style.display = 'flex';
+            editToggle.style.display = 'none';
+        });
+    }
+    
+    // Cancelar edição
+    if (cancelEdit) {
+        cancelEdit.addEventListener('click', function() {
+            nomeInput.value = nomeOriginal;
+            nomeInput.disabled = true;
+            formActions.style.display = 'none';
+            editToggle.style.display = 'flex';
+        });
+    }
+    
+    // Salvar alterações do perfil
+    if (perfilForm) {
+        perfilForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nome = nomeInput.value.trim();
+            
+            if (nome.length < 3) {
+                showToast('O nome deve ter pelo menos 3 caracteres!', 'warning', 'Nome inválido');
+                return false;
+            }
+            
+            // Quando tiver backend, envia aqui
+            showToast('Perfil atualizado com sucesso!', 'success', 'Salvo');
+            
+            nomeInput.disabled = true;
+            formActions.style.display = 'none';
+            editToggle.style.display = 'flex';
+        });
+    }
+    
+    // Trocar senha
+    const senhaForm = document.getElementById('senhaForm');
+    if (senhaForm) {
+        senhaForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const senhaAtual = document.getElementById('senha_atual').value;
+            const senhaNova = document.getElementById('senha_nova').value;
+            const senhaConfirmar = document.getElementById('senha_confirmar').value;
+            
+            if (senhaAtual.length === 0) {
+                showToast('Digite sua senha atual!', 'warning', 'Campo obrigatório');
+                return false;
+            }
+            
+            if (senhaNova.length < 6) {
+                showToast('A nova senha deve ter no mínimo 6 caracteres!', 'warning', 'Senha muito curta');
+                return false;
+            }
+            
+            if (senhaNova !== senhaConfirmar) {
+                showToast('As senhas não coincidem!', 'error', 'Erro');
+                return false;
+            }
+            
+            // Quando tiver backend, valida e atualiza aqui
+            showToast('Senha alterada com sucesso!', 'success', 'Atualizado');
+            
+            senhaForm.reset();
+        });
+    }
+    
+    // Excluir conta
+    const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+    if (deleteAccountBtn) {
+        deleteAccountBtn.addEventListener('click', function() {
+            document.getElementById('deleteAccountModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+    }
+    
+    const confirmDeleteAccount = document.getElementById('confirmDeleteAccount');
+    if (confirmDeleteAccount) {
+        confirmDeleteAccount.addEventListener('click', function() {
+            closeDeleteAccountModal();
+            showToast('Funcionalidade será implementada no backend!', 'info', 'Em breve');
+            // Quando tiver backend, exclui conta e desloga
+        });
+    }
+});
+
+function closeDeleteAccountModal() {
+    document.getElementById('deleteAccountModal').classList.remove('active');
+    document.body.style.overflow = '';
+}
