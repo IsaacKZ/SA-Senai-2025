@@ -48,7 +48,6 @@ O site funciona como vitrine - os usuários demonstram interesse nos produtos e 
 - [x] Área do admin (adicionar produtos)
 - [x] Gerenciamento de produtos
 - [x] Perfil do usuário
-- [x] Toast notifications
 - [x] Validações frontend
 - [x] Modais de confirmação
 - [x] Animações e transições
